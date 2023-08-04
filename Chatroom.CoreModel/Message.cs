@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Chatroom.CoreModel
 {
-    internal class Message
+    public class Message
     {
+        public int MessageId { get; set; }
+
+        public string? Context { get; set; }
+
+        public DateTime? Created { get; set; }
+
+        public User? User { get; set; }
     }
 }

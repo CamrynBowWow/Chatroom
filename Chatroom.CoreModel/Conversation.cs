@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Chatroom.CoreModel
 {
-    internal class Conversation
+    public class Conversation
     {
+        public int ConversationId { get; set; }
+
+        public User? User { get; set; }
+
+        public Message[]? Message { get; set; } // Maybe make this a list
     }
 }
