@@ -17,4 +17,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Chatroom.Plugins.EFCore\Chatroom.Plugins.EFCore.csproj" />
+  </ItemGroup>
+
 </Project>

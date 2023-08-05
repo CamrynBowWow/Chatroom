@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Chatroom.CoreModel\Chatroom.CoreModel.csproj" />
+  </ItemGroup>
+
 </Project>

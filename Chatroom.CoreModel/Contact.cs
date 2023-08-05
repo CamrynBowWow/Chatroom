@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chatroom.CoreModel
 {
-    public class Contacts
+    public class Contact
     {
         public int ContactId { get; set; }
 

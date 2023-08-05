@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Chatroom.Plugins.EFCore
+{
+    public class UserActions
+    {
+        public async Task EditUserProfileAsync()
+        {
+
+        }
+
+        public async Task DeleteUserProfileAsync()
+        {
+
+        }
+    }
+}
