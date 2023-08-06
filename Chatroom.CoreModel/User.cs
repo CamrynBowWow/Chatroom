@@ -9,7 +9,7 @@ namespace Chatroom.CoreModel
 {
     public class User
     {
-        public Guid UsrId { get; set; } // Must fix or figure out how to use for db
+        public Guid UserId { get; set; } // Must fix or figure out how to use for db
 
         [Required]
         public string? FirstName { get; set; }   
