@@ -15,5 +15,6 @@ namespace Chatroom.CoreModel
         public DateTime? Created { get; set; }
 
         public User? User { get; set; }
+        public Conversation? Conversation { get; set; }
     }
 }

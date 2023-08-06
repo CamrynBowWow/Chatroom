@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatroom", "Chatroom\Chatro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatroom.UseCases", "Chatroom.UseCases\Chatroom.UseCases.csproj", "{7E1AC718-9B47-4A21-8C93-5F5CF86EE2A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatroom.Plugins.EFCore", "Chatroom.Plugins.EFCore\Chatroom.Plugins.EFCore.csproj", "{190EAD4C-947B-4759-A403-9E7C19DDAB72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatroom.Plugins.EFCore", "Chatroom.Plugins.EFCore\Chatroom.Plugins.EFCore.csproj", "{190EAD4C-947B-4759-A403-9E7C19DDAB72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatroom.CoreModel", "Chatroom.CoreModel\Chatroom.CoreModel.csproj", "{680B33FA-E8E9-43A5-B643-E3F16E46A300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatroom.CoreModel", "Chatroom.CoreModel\Chatroom.CoreModel.csproj", "{680B33FA-E8E9-43A5-B643-E3F16E46A300}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,6 +11,7 @@ namespace Chatroom.CoreModel
     {
         public Guid UsrId { get; set; } // Must fix or figure out how to use for db
 
+        [Required]
         public string? FirstName { get; set; }   
 
         public string? LastName { get; set; }
