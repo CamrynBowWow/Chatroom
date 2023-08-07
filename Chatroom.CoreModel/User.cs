@@ -17,7 +17,7 @@ namespace Chatroom.CoreModel
         public string? LastName { get; set; }
 
         [Required]
-        public string? UnquieName { get; set; }
+        public string? UniqueName { get; set; }
 
         [Required]
         public string? Password { get; set; }
