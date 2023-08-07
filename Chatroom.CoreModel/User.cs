@@ -9,7 +9,7 @@ namespace Chatroom.CoreModel
 {
     public class User
     {
-        public Guid UserId { get; set; } // Must fix or figure out how to use for db
+        public Guid UserId { get; set; }
 
         [Required]
         public string? FirstName { get; set; }   
@@ -27,6 +27,13 @@ namespace Chatroom.CoreModel
 
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
-        public DateTime? LastUpdatedAt { get; } = DateTime.Now;
+        public DateTime? LastUpdatedAt { get; set; } = DateTime.Now;
+
+        public ICollection<Message>? Message { get; set; }
+
+        public ICollection<UserConversation>? UserConversations { get; set; }
+
+        public ContactList? ContactList { get; set; }
+
     }
 }

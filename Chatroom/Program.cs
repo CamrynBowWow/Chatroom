@@ -5,14 +5,29 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Chatroom.Plugins.EFCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddDbContext<ChatroomContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 var app = builder.Build();
+
+var scope = app.Services.CreateScope();
+var chatroomContext = scope.ServiceProvider.GetRequiredService<ChatroomContext>();
+chatroomContext.Database.EnsureDeleted();
+chatroomContext.Database.EnsureCreated();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

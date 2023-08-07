@@ -10,8 +10,10 @@ namespace Chatroom.CoreModel
     {
         public int ConversationId { get; set; }
 
-        public User? User { get; set; } // Might need to make an array for it
+        public List<User>? UserNames { get; set; } 
 
-        public Message[]? Message { get; set; } // Maybe make this a list
+        public List<Message>? MessageIds { get; set; } 
+
+        public ICollection<UserConversation>? UserConversations { get; set; }
     }
 }
