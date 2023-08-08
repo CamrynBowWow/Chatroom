@@ -19,6 +19,8 @@ namespace Chatroom.CoreModel
 
         public User? User { get; set; }
 
+        public int ConversationId { get; set; }
+
         public Conversation? Conversation { get; set; }
     }
 }

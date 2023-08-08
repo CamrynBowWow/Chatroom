@@ -4,6 +4,7 @@ using Chatroom.Plugins.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chatroom.Plugins.EFCore.Migrations
 {
     [DbContext(typeof(ChatroomContext))]
-    partial class ChatroomContextModelSnapshot : ModelSnapshot
+    [Migration("20230807210942_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +32,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactId"), 1L, 1);
 
-                    b.Property<Guid>("UserContact")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -42,20 +41,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         .IsUnique();
 
                     b.ToTable("ContactList");
-
-                    b.HasData(
-                        new
-                        {
-                            ContactId = 1,
-                            UserContact = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        },
-                        new
-                        {
-                            ContactId = 2,
-                            UserContact = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Conversation", b =>
@@ -66,23 +51,9 @@ namespace Chatroom.Plugins.EFCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationId"), 1L, 1);
 
-                    b.Property<Guid>("RecipientUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StartedUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ConversationId");
 
                     b.ToTable("Conversation");
-
-                    b.HasData(
-                        new
-                        {
-                            ConversationId = 1,
-                            RecipientUser = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            StartedUser = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Message", b =>
@@ -96,7 +67,7 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.Property<string>("Context")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ConversationId")
+                    b.Property<int?>("ConversationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Created")
@@ -112,16 +83,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Message");
-
-                    b.HasData(
-                        new
-                        {
-                            MessageId = 1,
-                            Context = "Hi, There!",
-                            ConversationId = 1,
-                            Created = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6590),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.User", b =>
@@ -129,6 +90,12 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ContactListContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ConversationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -157,6 +124,10 @@ namespace Chatroom.Plugins.EFCore.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("ContactListContactId");
+
+                    b.HasIndex("ConversationId");
+
                     b.HasIndex("Email")
                         .IsUnique();
 
@@ -169,25 +140,29 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         new
                         {
                             UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            CreatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6412),
+                            CreatedAt = new DateTime(2023, 8, 7, 23, 9, 42, 464, DateTimeKind.Local).AddTicks(3151),
                             Email = "joe@gmail.com",
                             FirstName = "Joe",
                             LastName = "Dirt",
-                            LastUpdatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6393),
+                            LastUpdatedAt = new DateTime(2023, 8, 7, 23, 9, 42, 464, DateTimeKind.Local).AddTicks(3126),
                             Password = "Password",
                             UniqueName = "JoeDirtie"
-                        },
-                        new
-                        {
-                            UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            CreatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6417),
-                            Email = "jane@gmail.com",
-                            FirstName = "Jane",
-                            LastName = "Doe",
-                            LastUpdatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6414),
-                            Password = "1234567",
-                            UniqueName = "JaneNew"
                         });
+                });
+
+            modelBuilder.Entity("Chatroom.CoreModel.UserConversation", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ConversationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ConversationId");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("UserConversation");
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.ContactList", b =>
@@ -204,10 +179,8 @@ namespace Chatroom.Plugins.EFCore.Migrations
             modelBuilder.Entity("Chatroom.CoreModel.Message", b =>
                 {
                     b.HasOne("Chatroom.CoreModel.Conversation", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("MessageIds")
+                        .HasForeignKey("ConversationId");
 
                     b.HasOne("Chatroom.CoreModel.User", "User")
                         .WithMany("Message")
@@ -220,9 +193,48 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Chatroom.CoreModel.User", b =>
+                {
+                    b.HasOne("Chatroom.CoreModel.ContactList", null)
+                        .WithMany("UserContacts")
+                        .HasForeignKey("ContactListContactId");
+
+                    b.HasOne("Chatroom.CoreModel.Conversation", null)
+                        .WithMany("UserNames")
+                        .HasForeignKey("ConversationId");
+                });
+
+            modelBuilder.Entity("Chatroom.CoreModel.UserConversation", b =>
+                {
+                    b.HasOne("Chatroom.CoreModel.Conversation", "Conversation")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chatroom.CoreModel.User", "User")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Chatroom.CoreModel.ContactList", b =>
+                {
+                    b.Navigation("UserContacts");
+                });
+
             modelBuilder.Entity("Chatroom.CoreModel.Conversation", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("MessageIds");
+
+                    b.Navigation("UserConversations");
+
+                    b.Navigation("UserNames");
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.User", b =>
@@ -230,6 +242,8 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.Navigation("ContactList");
 
                     b.Navigation("Message");
+
+                    b.Navigation("UserConversations");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,7 +13,7 @@ namespace Chatroom.CoreModel
 
         public Guid UserId { get; set; }
 
-        public List<User>? UserContacts { get; set; }
+        public Guid UserContact { get; set; }
 
         public User? User { get; set; }
     }

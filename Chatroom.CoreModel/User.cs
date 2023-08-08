@@ -31,8 +31,6 @@ namespace Chatroom.CoreModel
 
         public ICollection<Message>? Message { get; set; }
 
-        public ICollection<UserConversation>? UserConversations { get; set; }
-
         public ContactList? ContactList { get; set; }
 
     }

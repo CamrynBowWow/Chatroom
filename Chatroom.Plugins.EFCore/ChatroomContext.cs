@@ -20,19 +20,6 @@ namespace Chatroom.Plugins.EFCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserConversation>()
-                .HasKey(uc => new { uc.UserId, uc.ConversationId });
-
-            modelBuilder.Entity<UserConversation>()
-               .HasOne(uc => uc.User)
-               .WithMany(u => u.UserConversations)
-               .HasForeignKey(uc => uc.UserId);
-
-            modelBuilder.Entity<UserConversation>()
-                .HasOne(uc => uc.Conversation)
-                .WithMany(c => c.UserConversations)
-                .HasForeignKey(uc => uc.ConversationId);
-
             modelBuilder.Entity<Message>()
                 .HasOne(message => message.User)
                 .WithMany(user => user.Message)
@@ -43,6 +30,11 @@ namespace Chatroom.Plugins.EFCore
                 .WithOne(contactList => contactList.User)
                 .HasForeignKey<ContactList>(contactList => contactList.UserId);
 
+            modelBuilder.Entity<Message>()
+                .HasOne(message => message.Conversation)
+                .WithMany(conversation => conversation.Messages)
+                .HasForeignKey(message => message.ConversationId);
+
             modelBuilder.Entity<ContactList>().HasKey(cl => cl.ContactId);
             modelBuilder.Entity<Message>().HasKey(m => m.MessageId);
             modelBuilder.Entity<Conversation>().HasKey(con => con.ConversationId);
@@ -50,78 +42,66 @@ namespace Chatroom.Plugins.EFCore
             modelBuilder.Entity<User>().HasIndex(user => user.Email).IsUnique();
             modelBuilder.Entity<User>().HasIndex(user => user.UniqueName).IsUnique();
 
-            //modelBuilder.Entity<Message>().HasData(
-            //    new Message
-            //    {
-            //        MessageId = 1,
-            //        Context = "Hi, there!",
-            //        Created = DateTime.Now,
-            //        UserId = Guid.NewGuid(),
-            //    }
-            //);
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserId = new Guid("EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B"),
+                    FirstName = "Joe",
+                    LastName = "Dirt",
+                    UniqueName = "JoeDirtie",
+                    Password = "Password",
+                    Email = "joe@gmail.com",
+                    CreatedAt = DateTime.Now,
+                },
+                new User
+                {
+                    UserId = new Guid("7BCCB0BA-0050-4F69-9312-906436DDA76F"),
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    UniqueName = "JaneNew",
+                    Password = "1234567",
+                    Email = "jane@gmail.com",
+                    CreatedAt = DateTime.Now,
+                }                
+            );
 
-            //modelBuilder.Entity<Conversation>().HasData(
-            //    new Conversation
-            //    {
-            //        ConversationId = 1,
-            //        UserNames = new List<string>
-            //        {
-            //            "Tom",
-            //            "Jane",
-            //        },
-            //        MessageIds = new List<int>
-            //        {
-            //            1
-            //        }
-            //    }
-            //);
+            // Joe ID EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B
+            // Jane ID 7BCCB0BA-0050-4F69-9312-906436DDA76F
 
-            //modelBuilder.Entity<User>().HasData(
-            //    new User
-            //    {
-            //        UserId = Guid.NewGuid(),
-            //        FirstName = "Tom",
-            //        LastName = "Jerry",
-            //        UniqueName = "CoolTom",
-            //        Password = "Password",
-            //        Email = "test@gmail.com",
-            //        CreatedAt = DateTime.Now,
-            //        LastUpdatedAt = null,
-            //    },
-            //    new User
-            //    {
-            //        UserId = Guid.NewGuid(),
-            //        FirstName = "Jane",
-            //        LastName = "Doe",
-            //        UniqueName = "Unkown",
-            //        Password = "1234567",
-            //        Email = "jane@gmail.com",
-            //        CreatedAt = DateTime.Now,
-            //        LastUpdatedAt = null,
-            //    }
-            //);            
+            modelBuilder.Entity<Conversation>().HasData(
+                new Conversation
+                {
+                    ConversationId = 1,
+                    StartedUser = new Guid("EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B"),
+                    RecipientUser = new Guid("7BCCB0BA-0050-4F69-9312-906436DDA76F")
+                }
+            );
 
-            //modelBuilder.Entity<ContactList>().HasData(
-            //    new ContactList
-            //    {
-            //        ContactId = 1,
-            //        UserId = Guid.NewGuid(),
-            //        UserContacts = new List<string>
-            //        {
-            //            "Unkown"
-            //        }
-            //    },
-            //    new ContactList
-            //    {
-            //        ContactId = 2,
-            //        UserId = Guid.NewGuid(),
-            //        UserContacts = new List<string>
-            //        {
-            //            "CoolTom"
-            //        }
-            //    }
-            //);
+            modelBuilder.Entity<Message>().HasData(
+                new Message
+                {
+                    MessageId = 1,
+                    Context = "Hi, There!",
+                    Created = DateTime.Now,
+                    UserId = new Guid("EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B"),
+                    ConversationId = 1
+                }
+            );
 
+            modelBuilder.Entity<ContactList>().HasData(
+                new ContactList
+                {
+                    ContactId = 1,
+                    UserId = new Guid("EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B"),
+                    UserContact = new Guid("7BCCB0BA-0050-4F69-9312-906436DDA76F")
+                },  
+                new ContactList
+                {
+                    ContactId = 2,
+                    UserId = new Guid("7BCCB0BA-0050-4F69-9312-906436DDA76F"),
+                    UserContact = new Guid("EB0FBF5C-A60A-4EA7-A5E1-A9B58D1A062B")
+                }    
+            );
         }
     }
 }

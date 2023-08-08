@@ -4,6 +4,7 @@ using Chatroom.Plugins.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chatroom.Plugins.EFCore.Migrations
 {
     [DbContext(typeof(ChatroomContext))]
-    partial class ChatroomContextModelSnapshot : ModelSnapshot
+    [Migration("20230808065613_Init3")]
+    partial class Init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,20 +44,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         .IsUnique();
 
                     b.ToTable("ContactList");
-
-                    b.HasData(
-                        new
-                        {
-                            ContactId = 1,
-                            UserContact = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        },
-                        new
-                        {
-                            ContactId = 2,
-                            UserContact = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Conversation", b =>
@@ -75,14 +63,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasKey("ConversationId");
 
                     b.ToTable("Conversation");
-
-                    b.HasData(
-                        new
-                        {
-                            ConversationId = 1,
-                            RecipientUser = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            StartedUser = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Message", b =>
@@ -112,16 +92,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Message");
-
-                    b.HasData(
-                        new
-                        {
-                            MessageId = 1,
-                            Context = "Hi, There!",
-                            ConversationId = 1,
-                            Created = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6590),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.User", b =>
@@ -169,22 +139,22 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         new
                         {
                             UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            CreatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6412),
+                            CreatedAt = new DateTime(2023, 8, 8, 8, 56, 12, 562, DateTimeKind.Local).AddTicks(6843),
                             Email = "joe@gmail.com",
                             FirstName = "Joe",
                             LastName = "Dirt",
-                            LastUpdatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6393),
+                            LastUpdatedAt = new DateTime(2023, 8, 8, 8, 56, 12, 562, DateTimeKind.Local).AddTicks(6829),
                             Password = "Password",
                             UniqueName = "JoeDirtie"
                         },
                         new
                         {
                             UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            CreatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6417),
+                            CreatedAt = new DateTime(2023, 8, 8, 8, 56, 12, 562, DateTimeKind.Local).AddTicks(6923),
                             Email = "jane@gmail.com",
                             FirstName = "Jane",
                             LastName = "Doe",
-                            LastUpdatedAt = new DateTime(2023, 8, 8, 10, 9, 50, 518, DateTimeKind.Local).AddTicks(6414),
+                            LastUpdatedAt = new DateTime(2023, 8, 8, 8, 56, 12, 562, DateTimeKind.Local).AddTicks(6845),
                             Password = "1234567",
                             UniqueName = "JaneNew"
                         });

@@ -10,10 +10,10 @@ namespace Chatroom.CoreModel
     {
         public int ConversationId { get; set; }
 
-        public List<User>? UserNames { get; set; } 
+        public Guid StartedUser { get; set; }
 
-        public List<Message>? MessageIds { get; set; } 
+        public Guid RecipientUser { get; set; }
 
-        public ICollection<UserConversation>? UserConversations { get; set; }
+        public ICollection<Message>? Messages { get; set; }
     }
 }
