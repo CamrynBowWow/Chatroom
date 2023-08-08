@@ -15,16 +15,35 @@
 <div class="register-body">
     <h3>Register</h3>
 
-    <div class="main-container">
-        <input class="default-input" type="text" name="firstName" placeholder="Enter First Name..." />
+    <div class="register-container">
+        <div class="input-container">
+            <label>First Name</label>
+            <input class="default-input" type="text" name="firstName" placeholder="Enter First Name..." />
+        </div>
 
-        <input class="default-input" type="text" name="lastName" placeholder="Enter Last Name..." />
+        <div class="input-container">
+            <label>Last Name</label>
+            <input class="default-input" type="text" name="lastName" placeholder="Enter Last Name..." />
+        </div>
+        
+        <div class="input-container">
+            <label>Unique Name</label>
+            <input class="default-input" type="text" autocomplete="off" name="uniqueName" placeholder="Enter Unique Name..." />
+        </div>
+        
+        <div class="input-container">
+            <label>Password</label>
+            <input class="default-input" type="password" name="password" placeholder="Enter Password..." />
+        </div>
+        
+        <div class="input-container">
+            <label>Email</label>
+            <input class="default-input" type="email" name="emial" placeholder="Enter Email..." />
+        </div>
 
-        <input class="default-input" type="text" autocomplete="off" name="uniqueName" placeholder="Enter Unique Name..." />
-
-        <input class="default-input" type="password" name="password" placeholder="Enter Password..." />
-
-        <input class="default-input" type="email" name="emial" placeholder="Enter Email..." />
+        <div>
+            <a href="/signin">Sign In</a>
+        </div>
     </div>
 </div>
 

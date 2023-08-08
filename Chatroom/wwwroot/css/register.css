@@ -1,2 +1,31 @@
-﻿body {
+﻿.register-body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-container {
+    /*height: 750px;*/
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+    box-shadow: 1px 1px 3px black;
+    border-radius: 5px;
+}
+
+h3 {
+    padding: 15px;
+    font-size: 32px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    font-weight: bolder;
+    font-family: 'Times New Roman', Times, serif;
 }
