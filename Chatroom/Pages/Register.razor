@@ -1,19 +1,40 @@
 ﻿@page "/register"
 
-<PageTitle>Sign In</PageTitle>
+<PageTitle>Register</PageTitle>
 
-<div class="main-container">
-    <input type="text" name="firstName" placeholder="Enter First Name..." />
+<head>
+    <link rel="stylesheet" href="css/register.css" />
+</head>
 
-    <input type="text" name="lastName" placeholder="Enter Last Name..." />
+@if (!isLoaded)
+{
+    <LoadingScreenComponent />
+    return;
+}
 
-    <input type="text" autocomplete="off" name="uniqueName" placeholder="Enter Unique Name..." />
+<div class="register-body">
+    <h3>Register</h3>
 
-    <input type="password" name="password" placeholder="Enter Password..." />
+    <div class="main-container">
+        <input class="default-input" type="text" name="firstName" placeholder="Enter First Name..." />
 
-    <input type="email" name="emial" placeholder="Enter Email..." />
+        <input class="default-input" type="text" name="lastName" placeholder="Enter Last Name..." />
+
+        <input class="default-input" type="text" autocomplete="off" name="uniqueName" placeholder="Enter Unique Name..." />
+
+        <input class="default-input" type="password" name="password" placeholder="Enter Password..." />
+
+        <input class="default-input" type="email" name="emial" placeholder="Enter Email..." />
+    </div>
 </div>
 
-@code {
 
+@code {
+    bool isLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2000);
+        isLoaded = true;
+    }
 }

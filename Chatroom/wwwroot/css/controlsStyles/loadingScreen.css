@@ -1,0 +1,31 @@
+﻿.loading-body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.spinner {
+    width: 100px;
+    height: 100px;
+    border: 5px solid #cfd0d1;
+    border-bottom-color: #1c87c9;
+    border-radius: 50%;
+    animation: spinner 1.5s linear infinite;
+}
+
+p {
+    font-size: 24px;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
