@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Chatroom.Plugins.EFCore;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Chatroom.Authentication;
+using Chatroom.UseCases.PluginInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// Plugins
+builder.Services.AddTransient<IUserActions, UserActions>();
+
+builder.Services.AddAuthentication(); // Auth
+builder.Services.AddScoped<ProtectedSessionStorage>(); // Auth
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // Auth
 
 builder.Services.AddDbContext<ChatroomContext>(options =>
 {

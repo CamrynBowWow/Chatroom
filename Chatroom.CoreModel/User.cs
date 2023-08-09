@@ -25,9 +25,9 @@ namespace Chatroom.CoreModel
         [Required]
         public string? Email { get; set; }
 
-        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? CreatedAt { get; set; }
 
-        public DateTime? LastUpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? LastUpdatedAt { get; set; }
 
         public ICollection<Message>? Message { get; set; }
 
