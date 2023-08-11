@@ -20,7 +20,7 @@ namespace Chatroom.Plugins.EFCore
 
         public async Task<bool> SignInAction(string email, string password)
         {
-            User user = await db.User.FirstOrDefaultAsync(u => u.Email == email);
+            User user = await db.User.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
             if (user == null)
             {
@@ -47,7 +47,7 @@ namespace Chatroom.Plugins.EFCore
         // Maybe make return something else
         public async Task<(string, bool)> CreateUser(User user)
         {
-            if (db.User.Any(u => u.Email.ToLower() == user.Email.ToLower()))
+            if (db.User.Any(u => u.Email == user.Email))
             {
                 return ("Email Already Exist.", false);
             }

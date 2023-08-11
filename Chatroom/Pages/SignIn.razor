@@ -57,17 +57,6 @@
         isLoaded = true;
     }
 
-    private void HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            SignInSubmit();
-        }
-    }
-
-
-
-    // TODO: Make sure email is lowercase
     private async void SignInSubmit()
     {
         if (String.IsNullOrWhiteSpace(user.Email) || String.IsNullOrWhiteSpace(user.Password))
