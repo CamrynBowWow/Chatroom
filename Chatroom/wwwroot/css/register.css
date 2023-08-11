@@ -3,10 +3,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 50px;
 }
 
 .register-container {
-    /*height: 750px;*/
     width: 400px;
     display: flex;
     flex-direction: column;

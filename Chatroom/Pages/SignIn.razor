@@ -26,18 +26,19 @@
         <div class="child-container">
             <div class="input-container">
                 <label>Email</label>
-                <input class="default-input" @bind-value="user.Email" type="email" name="email" placeholder="Enter Email..." />
+                <input class="default-input form-control" @bind-value="user.Email" type="email" name="email" placeholder="Enter Email..." />
             </div>
 
             <div class="input-container">
                 <label>Password</label>
-                <input class="default-input" @bind-value="user.Password" type="password" name="password" placeholder="Enter Password..." />
+                <input class="default-input form-control" @bind-value="user.Password" type="password" name="password" placeholder="Enter Password..." />
             </div>
 
-            <button type="button" class="btn-outline-primary" @onclick="SignInSubmit">Sign In</button>
+            <button type="button" class="btn btn-outline-primary" @onclick="SignInSubmit">Sign In</button>
             
-            <div>
+            <div class="link-div">
                 <a href="/register">Register</a>
+                <a href="/forgotPassword">Forgot Password?</a>
             </div>
         </div>
     </div>
@@ -52,9 +53,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(2000);
+        await Task.Delay(1000);
         isLoaded = true;
     }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            SignInSubmit();
+        }
+    }
+
+
 
     // TODO: Make sure email is lowercase
     private async void SignInSubmit()
@@ -63,15 +74,13 @@
         {
             await JSRuntime.InvokeVoidAsync("alert", "Please Fill in your details or Register");
             return;
-        }
+        }       
 
-        var check = await UserActions.SignInAction(user.Email, user.Password);
-        Console.WriteLine(check);
+        bool signInResponse = await UserActions.SignInAction(user.Email, user.Password);
 
-        if (check)
+        if (signInResponse)
         {
             User userDetails = await UserActions.GetUserDetails(user.Email);
-            Console.WriteLine(userDetails);
 
             var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
 
@@ -83,6 +92,10 @@
             });
 
             NavigationManager.NavigateTo("/", true);
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "No Account exist. Please fill in correct details or Register");
         }
     }
 }

@@ -44,14 +44,23 @@ namespace Chatroom.Plugins.EFCore
             return null;
         }
 
-        public async Task EditUserProfileAsync()
+        // Maybe make return something else
+        public async Task<(string, bool)> CreateUser(User user)
         {
+            if (db.User.Any(u => u.Email.ToLower() == user.Email.ToLower()))
+            {
+                return ("Email Already Exist.", false);
+            }
+            
+            if (db.User.Any(u => u.UniqueName == user.UniqueName))
+            {
+                return ("Unique Name Already Exist.", false);
+            }
 
+            db.User.Add(user);
+            db.SaveChanges();
+
+            return ("Success, Welcome!", true);
         }
-
-        public async Task DeleteUserProfileAsync()
-        {
-
-        }       
     }
 }

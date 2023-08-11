@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chatroom.UseCases.Interfaces
 {
-    internal interface IAddContact
+    public interface IAddContact
     {
     }
 }

@@ -1,5 +1,10 @@
 ﻿@page "/register"
 
+@inject IJSRuntime JSRuntime
+@inject IUserActions UserActions
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+
 <PageTitle>Register</PageTitle>
 
 <head>
@@ -15,45 +20,101 @@ else
     <div class="register-body">
         <h3>Register</h3>
 
-        <div class="register-container">
-            <div class="input-container">
-                <label>First Name</label>
-                <input class="default-input" type="text" name="firstName" placeholder="Enter First Name..." />
+        <EditForm Model="userRegister" OnValidSubmit="RegisterUser">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+
+            <div class="register-container">
+                <div class="input-container">
+                    <label for="firstName">First Name</label>
+                    <InputText class="default-input form-control" @bind-Value="userRegister.FirstName" type="text" id="firstName" placeholder="Enter First Name..."></InputText>
+                </div>
+
+                <div class="input-container">
+                    <label>Last Name</label>
+                    <InputText class="default-input form-control" @bind-Value="userRegister.LastName" type="text" id="lastName" placeholder="Enter Last Name..."></InputText>
+                </div>
+
+                <div class="input-container">
+                    <label>Unique Name</label>
+                    <InputText class="default-input form-control" @bind-Value="userRegister.UniqueName" type="text" autocomplete="off" id="uniqueName" placeholder="Enter Unique Name..."></InputText>
+                </div>
+
+                <div class="input-container">
+                    <label>Password</label>
+                    <InputText class="default-input form-control" @bind-Value="userRegister.Password" autocomplete="off" type="password" id="password" placeholder="Enter Password..."></InputText>
+                </div>
+
+                <div class="input-container">
+                    <label>Email</label>
+                    <InputText class="default-input form-control" @bind-Value="userRegister.Email" type="email" id="emial" placeholder="Enter Email..."></InputText>
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary">Register Me!</button>
+
+                <div>
+                    <a href="/signin">Sign In</a>
+                </div>
             </div>
 
-            <div class="input-container">
-                <label>Last Name</label>
-                <input class="default-input" type="text" name="lastName" placeholder="Enter Last Name..." />
-            </div>
-
-            <div class="input-container">
-                <label>Unique Name</label>
-                <input class="default-input" type="text" autocomplete="off" name="uniqueName" placeholder="Enter Unique Name..." />
-            </div>
-
-            <div class="input-container">
-                <label>Password</label>
-                <input class="default-input" type="password" name="password" placeholder="Enter Password..." />
-            </div>
-
-            <div class="input-container">
-                <label>Email</label>
-                <input class="default-input" type="email" name="emial" placeholder="Enter Email..." />
-            </div>
-
-            <div>
-                <a href="/signin">Sign In</a>
-            </div>
-        </div>
+        </EditForm>
     </div>
 }
 
 @code {
     bool isLoaded = false;
 
+    private User? userRegister = new User();
+
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(2000);
+        await Task.Delay(1200);
         isLoaded = true;
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            RegisterUser();
+        }
+    }
+
+    private async void RegisterUser()
+    {
+        try
+        {
+            userRegister.CreatedAt = DateTime.Now;
+            userRegister.LastUpdatedAt = DateTime.Now;
+            userRegister.UserId = new Guid();
+
+            var result = UserActions.CreateUser(userRegister);
+
+            if (!result.Result.Item2)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", result.Result.Item1);
+                return;
+            }
+
+            if (result.Result.Item2)
+            {
+                var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
+
+                await customAuthStateProvider.UpdateAuthenticationState(new User
+                    {
+                        UserId = userRegister.UserId,
+                        Email = userRegister.Email,
+                        UniqueName = userRegister.UniqueName
+                    });
+
+                await JSRuntime.InvokeVoidAsync("alert", result.Result.Item1);
+                NavigationManager.NavigateTo("/", true);
+            }
+        }
+        catch (Exception error)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Error Message: " + error);
+        }
+        
     }
 }

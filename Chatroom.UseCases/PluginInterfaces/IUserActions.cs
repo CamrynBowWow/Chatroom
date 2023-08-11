@@ -12,5 +12,7 @@ namespace Chatroom.UseCases.PluginInterfaces
         Task<bool> SignInAction(string email, string password);
 
         Task<User> GetUserDetails(string email);
+
+        Task<(string, bool)> CreateUser(User user);
     }
 }

@@ -35,8 +35,8 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var chatroomContext = scope.ServiceProvider.GetRequiredService<ChatroomContext>();
-chatroomContext.Database.EnsureDeleted();
-chatroomContext.Database.EnsureCreated();
+//chatroomContext.Database.EnsureDeleted();
+//chatroomContext.Database.EnsureCreated();
 
 
 // Configure the HTTP request pipeline.

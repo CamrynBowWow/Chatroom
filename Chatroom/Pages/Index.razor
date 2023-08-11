@@ -1,10 +1,33 @@
 ﻿@page "/"
 
-
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<AuthorizeView>
+    <h1>Hello, @context.User.Identity.Name</h1>
 
-<p>Welcome to your new app.</p>
+    <p>@emailClaim</p>
+    <p>@sidClaim</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <p>Welcome to your new app.</p>
+
+    <SurveyPrompt Title="How is Blazor working for you?" />
+</AuthorizeView>
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    private string emailClaim;
+    private string sidClaim;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState;
+        var user = authState.User;
+
+        emailClaim = user.FindFirstValue(ClaimTypes.Email);
+        sidClaim = user.FindFirstValue(ClaimTypes.Sid);
+    }
+
+}
