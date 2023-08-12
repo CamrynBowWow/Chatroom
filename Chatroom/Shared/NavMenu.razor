@@ -1,4 +1,6 @@
-﻿<AuthorizeView>
+﻿@inject IConversationActions ConversationActions
+
+<AuthorizeView>
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
             @*Maybe make go to profile*@
@@ -10,9 +12,23 @@
     </div>
 
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-        @*This will be where the user converstions display*@
         <nav class="flex-column">
-            <div class="nav-item px-3">
+            @if (userList != null)
+            {
+                @foreach (User userConversation in userList)
+                {
+                    <div class="nav-item px-3 nav-user-conversation">
+                        <NavLink class="nav-link nav-link-width" href="">
+                            <UserConversationButtonComponent UserConversation="userConversation"></UserConversationButtonComponent>
+                        </NavLink>
+                        <button class="delete-button">
+                            <span class="oi-x"></span>
+                        </button>
+                    </div>
+                }
+            }
+
+          @*  <div class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Home
                 </NavLink>
@@ -21,7 +37,7 @@
                 <NavLink class="nav-link" href="counter">
                     <span class="oi oi-plus" aria-hidden="true"></span> Counter
                 </NavLink>
-            </div>
+            </div>*@
         </nav>
     </div>
 </AuthorizeView>
@@ -29,10 +45,26 @@
 @code {
     private bool collapseNavMenu = true;
 
+    private List<User>? userList;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private string sidClaim;
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState;
+        var user = authState.User;
+
+        sidClaim = user.FindFirstValue(ClaimTypes.Sid);
+
+        userList = await ConversationActions.GetConversations(new Guid(sidClaim));
     }
 }

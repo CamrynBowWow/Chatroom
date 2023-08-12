@@ -86,3 +86,46 @@ a, .btn-link {
     border-bottom: 1px dashed black;
     padding: 5px;
 }
+
+.user-conversation-div {
+    display: flex;
+    width: 100%;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+
+.nav-user-conversation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.nav-link-width {
+    width: 100%;
+    align-items: baseline !important;
+}
+
+.delete-button {
+    border: none;
+    background-color: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    height: 2.1rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    justify-content: center;
+}
+
+.delete-button span {
+    font-family: Icons;
+    font-size: 16px;
+    padding-bottom: 3px;
+    padding-left: 1px;
+}
+
+.delete-button:hover {
+    background-color: #a8a8a82d;
+}
