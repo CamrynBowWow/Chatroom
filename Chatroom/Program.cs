@@ -11,6 +11,7 @@ using Chatroom.Authentication;
 using Chatroom.UseCases.PluginInterfaces;
 using Chatroom.UseCases.Interfaces;
 using Chatroom.UseCases.ConversationActions;
+using Chatroom.UseCases.MessageActions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +25,11 @@ builder.Services.AddServerSideBlazor();
 // Plugins
 builder.Services.AddTransient<IUserActions, UserActions>();
 builder.Services.AddTransient<IConversationActions, ConversationActions>();
+builder.Services.AddTransient<IMessageActions, MessageActions>();
 
 // Use Cases
 builder.Services.AddTransient<IFetchConversations, FetchConversations>();
+builder.Services.AddTransient<IFetchMessages, FetchMessages>();
 
 builder.Services.AddAuthentication(); // Auth
 builder.Services.AddScoped<ProtectedSessionStorage>(); // Auth

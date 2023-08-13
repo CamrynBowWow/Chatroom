@@ -1,0 +1,25 @@
+﻿.chat-container {
+    display: flex;
+    flex-direction: column;
+    background-color: lightgray;
+    /*height: 90vh;*/
+    /*flex: 1;*/
+}
+
+.chat-container {
+
+}
+
+.text-container {
+    background-color: gray;
+    height: 50px;
+    width: 100%;
+}
+
+.recipientUser-div {
+    background-color: blue;
+}
+
+.host-div {
+    background-color: red
+}

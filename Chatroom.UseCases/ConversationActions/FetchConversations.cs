@@ -18,9 +18,9 @@ namespace Chatroom.UseCases.ConversationActions
             this.conversationActions = conversationActions;
         }
 
-        public Task<List<User>> ExecuteAsync(Guid userId)
+        public async Task<List<User>> ExecuteAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await conversationActions.GetConversations(userId);
         }
     }
 }

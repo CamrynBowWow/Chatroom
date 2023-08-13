@@ -1,0 +1,63 @@
+﻿@page "/userChat/{OtherUserUniqueName}/{Id}"
+
+@inject IMessageActions MessageActions
+
+<head>
+    <link rel="stylesheet" href="css/userChat.css" />
+</head>
+
+<AuthorizeView>
+    <div class="chat-container">
+        <div class="chat-container">
+
+            @if (messagesList != null)
+            {
+                @foreach (var message in messagesList)
+                {
+                    <div class="@(new Guid(sidClaim) == message.UserId ? "host-div" : "recipientUser-div")">
+                        <p>@message.Context</p>
+                        <h3>@(message.UserId == new Guid(sidClaim) ? context.User.Identity.Name : OtherUserUniqueName)</h3>
+                        <h3>@message.Created</h3>
+                    </div>
+                }
+            }
+
+        </div>
+
+        <div class="text-container">
+
+        </div>
+    </div>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public string OtherUserUniqueName { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+    private string OtherUserId;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private string sidClaim;
+
+    private List<Message> messagesList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState;
+        var user = authState.User;
+
+        sidClaim = user.FindFirstValue(ClaimTypes.Sid);   
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        OtherUserId = Encoding.UTF8.GetString(Convert.FromBase64String(Id));
+
+        messagesList = await MessageActions.FetchMessages(new Guid(sidClaim), new Guid(OtherUserId));
+
+        await base.OnParametersSetAsync();
+    }
+}
