@@ -18,6 +18,7 @@ namespace Chatroom.Plugins.EFCore
             this.db = db;
         }
 
+        /// HERE: Password
         public async Task<bool> SignInAction(string email, string password)
         {
             User user = await db.User.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
@@ -45,6 +46,7 @@ namespace Chatroom.Plugins.EFCore
         }
 
         // Maybe make return something else
+        /// HERE: Password
         public async Task<(string, bool)> CreateUser(User user)
         {
             if (db.User.Any(u => u.Email == user.Email))

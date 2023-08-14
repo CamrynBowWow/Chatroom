@@ -7,17 +7,20 @@
 </head>
 
 <AuthorizeView>
-    <div class="chat-container">
+    <div class="parent-chat-container">
         <div class="chat-container">
 
             @if (messagesList != null)
             {
                 @foreach (var message in messagesList)
                 {
-                    <div class="@(new Guid(sidClaim) == message.UserId ? "host-div" : "recipientUser-div")">
-                        <p>@message.Context</p>
-                        <h3>@(message.UserId == new Guid(sidClaim) ? context.User.Identity.Name : OtherUserUniqueName)</h3>
-                        <h3>@message.Created</h3>
+                    <div class="@(new Guid(sidClaim) == message.UserId ? "host-message-container" : "recipientUser-message-container")">
+                        <div class="@(new Guid(sidClaim) == message.UserId ? "host-div" : "recipientUser-div")">
+                            <p>@message.Context</p>
+                            <div class="date-container">
+                                <h4>@message.Created?.ToString("dd MMM yyyy HH:mm")</h4>
+                            </div>
+                        </div>
                     </div>
                 }
             }

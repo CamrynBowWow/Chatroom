@@ -1,25 +1,75 @@
-﻿.chat-container {
+﻿.parent-chat-container {
     display: flex;
     flex-direction: column;
-    background-color: lightgray;
-    /*height: 90vh;*/
-    /*flex: 1;*/
+    background-color: #f1f1f1;
+    justify-content: flex-start;
+    height: 100vh;
 }
 
 .chat-container {
-
+    height: 100vh;
+    position: relative;
+    padding: 5px 5px 0px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .text-container {
     background-color: gray;
     height: 50px;
     width: 100%;
+    bottom: 0px;
+    position: sticky;
+}
+
+.host-message-container,
+.recipientUser-message-container {
+    width: 100%;
+    display: flex;
+}
+
+.host-message-container {
+    justify-content: flex-end;
+}
+
+.recipientUser-message-container {
+    justify-content: flex-start
+}
+
+.host-div,
+.recipientUser-div {
+    display: flex;
+    padding: 5px 5px 0px 10px;
+    flex-direction: column;
+    max-width: 50%;
+    border-radius: 5px;
+    gap: 5px;
 }
 
 .recipientUser-div {
-    background-color: blue;
+    background-color: #115abf;
 }
 
 .host-div {
-    background-color: red
+    background-color: #06917a;
+}
+
+.date-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1px 0px 0px 0px;
+}
+
+.date-container h4 {
+    font-size: 8px;
+    color: #cfcfcf9b;
+    margin-bottom: 3px;
+}
+
+.chat-container p {
+    color: white;
+    margin-bottom: 0rem !important;
+    margin-right: 1.1rem !important;
 }

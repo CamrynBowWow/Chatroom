@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chatroom.UseCases.Interfaces
+namespace Chatroom.UseCases.Methods
 {
-    internal interface IDeleteContact
+    public class PasswordHashCompare
     {
     }
 }
