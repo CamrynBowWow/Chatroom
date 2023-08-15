@@ -1,4 +1,5 @@
 ﻿using Chatroom.CoreModel;
+using Chatroom.UseCases.Methods;
 using Chatroom.UseCases.PluginInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,10 +13,16 @@ namespace Chatroom.Plugins.EFCore
     public class UserActions : IUserActions
     {
         private readonly ChatroomContext db;
+        private readonly PasswordHashCompare passwordHashCompare;
+        private readonly PasswordHashCreate passwordHashCreate;
 
         public UserActions(ChatroomContext db)
         {
+            
             this.db = db;
+            // These lines create instances of the PasswordHashCompare and PasswordHashCreate classes and assign them to the respective fields 
+            this.passwordHashCompare = new PasswordHashCompare();
+            this.passwordHashCreate = new PasswordHashCreate();
         }
 
         /// HERE: Password
@@ -28,7 +35,8 @@ namespace Chatroom.Plugins.EFCore
                 return false;
             }
 
-            bool passwordMatch = user.Password == password;
+            // the stored hashed password is compared with the hashed user input using the VerifyPassword method from the same class.
+            bool passwordMatch = PasswordHashCompare.VerifyPassword(user.Password, password);
 
             return passwordMatch;
         }
@@ -59,6 +67,8 @@ namespace Chatroom.Plugins.EFCore
                 return ("Unique Name Already Exist.", false);
             }
 
+            // is used to hash the plain text password stored in the user object and replace it with the hashed version. 
+            user.Password = PasswordHashCompare.HashPassword(user.Password);
             db.User.Add(user);
             db.SaveChanges();
 
