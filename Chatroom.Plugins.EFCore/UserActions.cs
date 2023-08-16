@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace Chatroom.Plugins.EFCore
 {
@@ -20,7 +21,7 @@ namespace Chatroom.Plugins.EFCore
         {
             
             this.db = db;
-            // These lines create instances of the PasswordHashCompare and PasswordHashCreate classes and assign them to the respective fields 
+            // instances of the PasswordHashCompare and PasswordHashCreate 
             this.passwordHashCompare = new PasswordHashCompare();
             this.passwordHashCreate = new PasswordHashCreate();
         }
@@ -35,7 +36,7 @@ namespace Chatroom.Plugins.EFCore
                 return false;
             }
 
-            // the stored hashed password is compared with the hashed user input using the VerifyPassword method from the same class.
+            // compared with the hashed user input 
             bool passwordMatch = PasswordHashCompare.VerifyPassword(user.Password, password);
 
             return passwordMatch;
@@ -67,8 +68,9 @@ namespace Chatroom.Plugins.EFCore
                 return ("Unique Name Already Exist.", false);
             }
 
-            // is used to hash the plain text password stored in the user object and replace it with the hashed version. 
-            user.Password = PasswordHashCompare.HashPassword(user.Password);
+
+            string passwordToHash = user.Password;
+            user.Password = passwordHashCreate.HashPassword(passwordToHash);
             db.User.Add(user);
             db.SaveChanges();
 
