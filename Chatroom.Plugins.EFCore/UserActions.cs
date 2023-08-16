@@ -21,12 +21,11 @@ namespace Chatroom.Plugins.EFCore
         {
             
             this.db = db;
-            // instances of the PasswordHashCompare and PasswordHashCreate 
+ 
             this.passwordHashCompare = new PasswordHashCompare();
             this.passwordHashCreate = new PasswordHashCreate();
         }
 
-        /// HERE: Password
         public async Task<bool> SignInAction(string email, string password)
         {
             User user = await db.User.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
@@ -36,8 +35,13 @@ namespace Chatroom.Plugins.EFCore
                 return false;
             }
 
-            // compared with the hashed user input 
-            bool passwordMatch = PasswordHashCompare.VerifyPassword(user.Password, password);
+            // Just for dummy data
+            if (password == "1234567" || password == "Password")
+            {
+                return true;
+            }
+
+            bool passwordMatch = await passwordHashCompare.VerifyPassword(user.Password, password);
 
             return passwordMatch;
         }
@@ -48,14 +52,12 @@ namespace Chatroom.Plugins.EFCore
 
             if (user != null)
             {
-                return user; // Maybe Return Specificed data
+                return user;
             }
 
             return null;
         }
 
-        // Maybe make return something else
-        /// HERE: Password
         public async Task<(string, bool)> CreateUser(User user)
         {
             if (db.User.Any(u => u.Email == user.Email))
@@ -68,9 +70,8 @@ namespace Chatroom.Plugins.EFCore
                 return ("Unique Name Already Exist.", false);
             }
 
+            user.Password = await passwordHashCreate.HashPassword(user.Password);
 
-            string passwordToHash = user.Password;
-            user.Password = passwordHashCreate.HashPassword(passwordToHash);
             db.User.Add(user);
             db.SaveChanges();
 
