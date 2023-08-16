@@ -16,11 +16,16 @@
 }
 
 .text-container {
-    background-color: gray;
-    height: 50px;
+    background-color: #dddddd;
+    resize: none;
+    overflow: hidden;
     width: 100%;
     bottom: 0px;
+    padding: 10px 0px 10px 20px;
     position: sticky;
+    outline: none;
+    border: none;
+    line-height: 20px;
 }
 
 .host-message-container,

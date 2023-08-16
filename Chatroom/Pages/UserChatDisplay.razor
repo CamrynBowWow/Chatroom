@@ -1,6 +1,7 @@
 ﻿@page "/userChat/{OtherUserUniqueName}/{Id}"
 
 @inject IMessageActions MessageActions
+@inject IJSRuntime JSRuntime
 
 <head>
     <link rel="stylesheet" href="css/userChat.css" />
@@ -27,9 +28,10 @@
 
         </div>
 
-        <div class="text-container">
+        <textarea @ref="textareaRef" @oninput="UpdateTextAreaHeight" rows="2" maxlength="254" class="text-container" @bind="inputText">
+            @inputText
+        </textarea>
 
-        </div>
     </div>
 </AuthorizeView>
 
@@ -40,6 +42,9 @@
     [Parameter]
     public string Id { get; set; }
     private string OtherUserId;
+
+    private string inputText = "";
+    private ElementReference textareaRef;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
@@ -62,5 +67,10 @@
         messagesList = await MessageActions.FetchMessages(new Guid(sidClaim), new Guid(OtherUserId));
 
         await base.OnParametersSetAsync();
+    }
+
+    private async Task UpdateTextAreaHeight(ChangeEventArgs e)
+    {
+        await JSRuntime.InvokeVoidAsync("autoGrowTextArea", textareaRef);
     }
 }

@@ -27,9 +27,9 @@ namespace Chatroom.Plugins.EFCore
             return messages;
         }
 
-        public async Task SendMessageAsync()
+        public Task SendMessage(Message message)
         {
-
+            throw new NotImplementedException();
         }
     }
 }
