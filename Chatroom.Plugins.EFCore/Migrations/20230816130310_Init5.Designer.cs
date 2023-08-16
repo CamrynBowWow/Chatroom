@@ -4,6 +4,7 @@ using Chatroom.Plugins.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chatroom.Plugins.EFCore.Migrations
 {
     [DbContext(typeof(ChatroomContext))]
-    partial class ChatroomContextModelSnapshot : ModelSnapshot
+    [Migration("20230816130310_Init5")]
+    partial class Init5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,20 +43,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ContactList");
-
-                    b.HasData(
-                        new
-                        {
-                            ContactId = 1,
-                            UserContact = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        },
-                        new
-                        {
-                            ContactId = 2,
-                            UserContact = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Conversation", b =>
@@ -74,14 +62,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasKey("ConversationId");
 
                     b.ToTable("Conversation");
-
-                    b.HasData(
-                        new
-                        {
-                            ConversationId = 1,
-                            RecipientUser = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            StartedUser = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.Message", b =>
@@ -111,16 +91,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Message");
-
-                    b.HasData(
-                        new
-                        {
-                            MessageId = 1,
-                            Context = "Hi, There!",
-                            ConversationId = 1,
-                            Created = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1879),
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.User", b =>
@@ -163,28 +133,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         .IsUnique();
 
                     b.ToTable("User");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            CreatedAt = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1763),
-                            Email = "joe@gmail.com",
-                            FirstName = "Joe",
-                            LastName = "Dirt",
-                            Password = "Password",
-                            UniqueName = "JoeDirtie"
-                        },
-                        new
-                        {
-                            UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            CreatedAt = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1775),
-                            Email = "jane@gmail.com",
-                            FirstName = "Jane",
-                            LastName = "Doe",
-                            Password = "1234567",
-                            UniqueName = "JaneNew"
-                        });
                 });
 
             modelBuilder.Entity("Chatroom.CoreModel.ContactList", b =>
