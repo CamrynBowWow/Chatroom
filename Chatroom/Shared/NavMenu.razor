@@ -15,11 +15,11 @@
         <nav class="flex-column">
             @if (userList != null)
             {
-                @foreach (User userConversation in userList)
+                @foreach (KeyValuePair<int, User> userConversation in userList)
                 {
                     <div class="nav-item px-3 nav-user-conversation">
-                        <NavLink class="nav-link nav-link-width" href="@($"/userChat/{userConversation.UniqueName}/{Convert.ToBase64String(Encoding.UTF8.GetBytes(userConversation.UserId.ToString()))}")">
-                            <UserConversationButtonComponent UserConversation="userConversation"></UserConversationButtonComponent>
+                        <NavLink class="nav-link nav-link-width" href="@($"/userChat/{userConversation.Key.ToString()}/{userConversation.Value.UniqueName}/{Convert.ToBase64String(Encoding.UTF8.GetBytes(userConversation.Value.UserId.ToString()))}")">
+                            <UserConversationButtonComponent UserConversation="userConversation.Value"></UserConversationButtonComponent>
                         </NavLink>
                         <button class="delete-button">
                             <span class="oi-x"></span>
@@ -34,7 +34,7 @@
 @code {
     private bool collapseNavMenu = true;
 
-    private List<User>? userList;
+    private Dictionary<int, User>? userList;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }

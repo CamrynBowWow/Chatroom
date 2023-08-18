@@ -7,12 +7,14 @@
 }
 
 .chat-container {
-    height: 100vh;
+    height: 100%;
     position: relative;
     padding: 5px 5px 0px 5px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 65px;
+    overflow-y: scroll;
 }
 
 .text-container {
@@ -20,12 +22,35 @@
     resize: none;
     overflow: hidden;
     width: 100%;
-    bottom: 0px;
-    padding: 10px 0px 10px 20px;
-    position: sticky;
+    padding: 10px 5px 10px 10px;
     outline: none;
     border: none;
     line-height: 20px;
+}
+
+.text-container-area {
+    display: flex;
+    flex-direction: row;
+    bottom: 0px;
+    position: sticky;
+}
+
+.text-container-area button {
+    width: 80px;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background-color: #3a9f2e;
+    color: white;
+}
+
+.text-container-area button:hover {
+    background-color: #eeeeee;
+    color: #3a9f2e;
+    border: 1px solid #3a9f2e;
 }
 
 .host-message-container,

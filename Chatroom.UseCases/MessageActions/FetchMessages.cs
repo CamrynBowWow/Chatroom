@@ -18,7 +18,7 @@ namespace Chatroom.UseCases.MessageActions
             this.messageActions = messageActions;
         }
 
-        public async Task<List<Message>> ExecuteAsync(Guid HostUserId, Guid OtherUserId)
+        public async Task<(List<Message>, int)> ExecuteAsync(Guid HostUserId, Guid OtherUserId)
         {
             return await messageActions.FetchMessages(HostUserId, OtherUserId);
         }

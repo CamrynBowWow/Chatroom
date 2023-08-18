@@ -4,6 +4,6 @@ namespace Chatroom.UseCases.Interfaces
 {
     public interface IFetchConversations
     {
-        Task<List<User>> ExecuteAsync(Guid userId);
+        Task<Dictionary<int, User>> ExecuteAsync(Guid userId);
     }
 }

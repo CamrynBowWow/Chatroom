@@ -1,7 +1,8 @@
-﻿@page "/userChat/{OtherUserUniqueName}/{Id}"
+﻿@page "/userChat/{conId}/{OtherUserUniqueName}/{Id}"
 
 @inject IMessageActions MessageActions
 @inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
 
 <head>
     <link rel="stylesheet" href="css/userChat.css" />
@@ -28,9 +29,15 @@
 
         </div>
 
-        <textarea @ref="textareaRef" @oninput="UpdateTextAreaHeight" rows="2" maxlength="254" class="text-container" @bind="inputText">
-            @inputText
-        </textarea>
+        <div class="text-container-area">
+            <textarea @ref="textareaRef" @oninput="UpdateTextAreaHeight" rows="2" maxlength="254" class="text-container" @bind="inputText">
+                @inputText
+            </textarea>
+
+            <button @onclick="SendText">
+                <span class="oi oi-arrow-thick-right"></span>
+            </button>
+        </div>
 
     </div>
 </AuthorizeView>
@@ -38,6 +45,9 @@
 @code {
     [Parameter]
     public string OtherUserUniqueName { get; set; }
+
+    [Parameter]
+    public string conId { get; set; } // Conversation ID
 
     [Parameter]
     public string Id { get; set; }
@@ -51,22 +61,76 @@
     private string sidClaim;
 
     private List<Message> messagesList = new();
+    private int conversationId;
+
+    private HubConnection? hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await authenticationState;
         var user = authState.User;
 
-        sidClaim = user.FindFirstValue(ClaimTypes.Sid);   
+        sidClaim = user.FindFirstValue(ClaimTypes.Sid);
     }
 
     protected override async Task OnParametersSetAsync()
     {
+        if (hubConnection != null)
+        {
+            try
+            {
+                await hubConnection.StopAsync();
+            }
+            finally
+            {
+                await hubConnection.DisposeAsync();
+            }
+        }
+
         OtherUserId = Encoding.UTF8.GetString(Convert.FromBase64String(Id));
 
-        messagesList = await MessageActions.FetchMessages(new Guid(sidClaim), new Guid(OtherUserId));
+        var fetchedData = await MessageActions.FetchMessages(new Guid(sidClaim), new Guid(OtherUserId));
+
+        messagesList = fetchedData.Item1;
+        conversationId = fetchedData.Item2;
+
+        // Used to Make Connection to the other user
+        hubConnection = new HubConnectionBuilder().WithUrl(Navigation.ToAbsoluteUri($"/userChat/{conId}")).Build();
+
+        hubConnection.On<Message, int>("ReceiveRealTimeUpdate", (message, conversationId) =>
+        {
+            // Will only fire when Conversation IDs are the same
+            if (conversationId == Convert.ToInt32(conId))
+            {
+                messagesList.Add(message);
+                InvokeAsync(StateHasChanged);
+            }
+        });
+
+        await hubConnection.StartAsync();
 
         await base.OnParametersSetAsync();
+    }
+
+    private async Task SendText()
+    {
+        if (String.IsNullOrWhiteSpace(inputText)) return;
+
+        Message message = new();
+
+        message.Context = inputText.Trim();
+        message.ConversationId = conversationId;
+        message.Created = DateTime.Now;
+        message.UserId = new Guid(sidClaim);
+
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendRealTimeUpdate", message, Convert.ToInt32(conId));
+        }
+
+        await MessageActions.SendMessage(message);
+
+        inputText = "";
     }
 
     private async Task UpdateTextAreaHeight(ChangeEventArgs e)
