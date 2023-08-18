@@ -9,6 +9,8 @@ namespace Chatroom.UseCases.PluginInterfaces
 {
     public interface IMessageActions
     {
-        Task<List<Message>> FetchMessages(Guid HostUserId, Guid OtherUserId);
+        Task<(List<Message>, int)> FetchMessages(Guid HostUserId, Guid OtherUserId);
+
+        Task SendMessage(Message message);
     }
 }

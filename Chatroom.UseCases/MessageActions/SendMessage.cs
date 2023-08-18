@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace Chatroom.UseCases.MessageActions
 {
-    public class FetchMessages : IFetchMessages
+    public class SendMessage : ISendMessage
     {
         private readonly IMessageActions messageActions;
 
-        public FetchMessages(IMessageActions messageActions)
+        public SendMessage(IMessageActions messageActions)
         {
             this.messageActions = messageActions;
         }
 
-        public async Task<(List<Message>, int)> ExecuteAsync(Guid HostUserId, Guid OtherUserId)
+        public async Task ExecuteAsync(Message message)
         {
-            return await messageActions.FetchMessages(HostUserId, OtherUserId);
+            await messageActions.SendMessage(message);
         }
     }
 }

@@ -12,6 +12,8 @@ using Chatroom.UseCases.PluginInterfaces;
 using Chatroom.UseCases.Interfaces;
 using Chatroom.UseCases.ConversationActions;
 using Chatroom.UseCases.MessageActions;
+using Chatroom.Hubs;
+using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,16 @@ builder.Services.AddTransient<IMessageActions, MessageActions>();
 // Use Cases
 builder.Services.AddTransient<IFetchConversations, FetchConversations>();
 builder.Services.AddTransient<IFetchMessages, FetchMessages>();
+builder.Services.AddTransient<ISendMessage, SendMessage>();
+
+builder.Services.AddCors();
+builder.Services.AddSignalR();
+
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
+});
 
 builder.Services.AddAuthentication(); // Auth
 builder.Services.AddScoped<ProtectedSessionStorage>(); // Auth
@@ -44,9 +56,6 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var chatroomContext = scope.ServiceProvider.GetRequiredService<ChatroomContext>();
-//chatroomContext.Database.EnsureDeleted();
-//chatroomContext.Database.EnsureCreated();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -67,6 +76,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseResponseCompression();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/userChat/{conId}");
+
+});
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

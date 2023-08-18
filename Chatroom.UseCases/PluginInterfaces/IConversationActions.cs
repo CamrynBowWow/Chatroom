@@ -9,6 +9,6 @@ namespace Chatroom.UseCases.PluginInterfaces
 {
     public interface IConversationActions
     {
-        Task<List<User>> GetConversations(Guid userId);
+        Task<Dictionary<int, User>> GetConversations(Guid userId);
     }
 }

@@ -18,18 +18,19 @@ namespace Chatroom.Plugins.EFCore
             this.db = db;
         }
 
-        public async Task<List<Message>> FetchMessages(Guid HostUserId, Guid OtherUserId)
+        public async Task<(List<Message>, int)> FetchMessages(Guid HostUserId, Guid OtherUserId)
         {
             var conversationId = await db.Conversation.FirstOrDefaultAsync(c => (c.StartedUser == HostUserId || c.StartedUser == OtherUserId) && (c.RecipientUser == HostUserId || c.RecipientUser == OtherUserId));
 
             List<Message> messages = await db.Message.Where(m => m.ConversationId == conversationId.ConversationId).ToListAsync();
 
-            return messages;
+            return (messages, conversationId.ConversationId);
         }
 
-        public async Task SendMessageAsync()
+        public async Task SendMessage(Message message)
         {
-
+            db.Message.Add(message);
+            db.SaveChanges();
         }
     }
 }
