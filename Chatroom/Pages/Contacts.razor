@@ -1,9 +1,75 @@
 ﻿@page "/contacts"
 
+@inject IContactActions ContactActions
+@inject IJSRuntime JSRuntime
+
 <PageTitle>Contacts</PageTitle>
 
-<h3>Contacts</h3>
+<head>
+    <link rel="stylesheet" href="css/contact.css" />
+</head>
+
+<div class="contact-parent-container">
+    <div class="contact-input-container">
+        <input class="form-control" @bind="inputText" type="text" maxlength="100" placeholder="Enter Unique Name Here..." autocomplete="off" />
+        <button @onclick="AddToContacts" class="btn btn-primary">Add</button>
+    </div>
+
+    <div class="contact-area-container">
+        @foreach(User user in userList)
+        {
+            <div class="contact-container">
+                <div class="contact-unique-name-container">
+                    <h2>@user.UniqueName</h2>
+                </div>
+
+                <div class="contact-options-container">
+                    <span class="oi-trash"></span>
+                    <span class="oi-chat"></span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
+    private string? inputText;
 
+    private List<User> userList = new();
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private string sidClaim;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState;
+        var user = authState.User;
+
+        sidClaim = user.FindFirstValue(ClaimTypes.Sid);
+
+        await FetchContactList();
+    }
+
+    private async Task AddToContacts()
+    {
+        if (String.IsNullOrWhiteSpace(inputText)) return;
+
+        var fetchedData = await ContactActions.AddContact(inputText, new Guid(sidClaim));
+
+        if (fetchedData.Item1 == null)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", fetchedData.Item2);
+            return;
+        }
+
+        userList.Add(fetchedData.Item1);
+        inputText = "";
+        await JSRuntime.InvokeVoidAsync("alert", fetchedData.Item2);
+    }
+
+    private async Task FetchContactList()
+    {
+        userList.AddRange(await ContactActions.FetchContacts(new Guid(sidClaim)));
+    }
 }
