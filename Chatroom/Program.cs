@@ -14,6 +14,7 @@ using Chatroom.UseCases.ConversationActions;
 using Chatroom.UseCases.MessageActions;
 using Chatroom.Hubs;
 using Microsoft.AspNetCore.ResponseCompression;
+using Chatroom.UseCases.ContactActions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,11 +29,14 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<IUserActions, UserActions>();
 builder.Services.AddTransient<IConversationActions, ConversationActions>();
 builder.Services.AddTransient<IMessageActions, MessageActions>();
+builder.Services.AddTransient<IContactActions, ContactActions>();
 
 // Use Cases
 builder.Services.AddTransient<IFetchConversations, FetchConversations>();
 builder.Services.AddTransient<IFetchMessages, FetchMessages>();
 builder.Services.AddTransient<ISendMessage, SendMessage>();
+builder.Services.AddTransient<IAddContact, AddContact>();
+builder.Services.AddTransient<IFetchContacts, FetchContacts>();
 
 builder.Services.AddCors();
 builder.Services.AddSignalR();
