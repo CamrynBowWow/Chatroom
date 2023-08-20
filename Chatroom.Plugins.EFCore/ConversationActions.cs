@@ -38,5 +38,10 @@ namespace Chatroom.Plugins.EFCore
 
             return userDictionary;
         }
+
+        public Task<int> CreateConversations(User recipientUser, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
