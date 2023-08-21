@@ -11,6 +11,6 @@ namespace Chatroom.UseCases.PluginInterfaces
     {
         Task<Dictionary<int, User>> GetConversations(Guid userId);
 
-        Task<int> CreateConversations(User recipientUser, Guid userId);
+        Task<(int, bool)> CreateConversations(User recipientUser, Guid userId);
     }
 }

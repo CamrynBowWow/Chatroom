@@ -39,9 +39,26 @@ namespace Chatroom.Plugins.EFCore
             return userDictionary;
         }
 
-        public Task<int> CreateConversations(User recipientUser, Guid userId)
+        public async Task<(int, bool)> CreateConversations(User recipientUser, Guid userId)
         {
-            throw new NotImplementedException();
+            Conversation conversation = await db.Conversation.FirstOrDefaultAsync(c => (c.StartedUser == userId || c.RecipientUser == userId) && (c.RecipientUser == recipientUser.UserId || c.StartedUser == recipientUser.UserId));
+
+            if (conversation != null)
+            {
+                return (conversation.ConversationId, false);
+            }
+
+            Conversation newConversation = new();
+
+            newConversation.StartedUser = userId;
+            newConversation.RecipientUser = recipientUser.UserId;
+
+            db.Conversation.Add(newConversation);
+            db.SaveChanges();
+
+            newConversation = await db.Conversation.FirstOrDefaultAsync(c => c.StartedUser == userId && c.RecipientUser == recipientUser.UserId);
+
+            return (newConversation.ConversationId, true);
         }
     }
 }

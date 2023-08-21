@@ -15,6 +15,7 @@ using Chatroom.UseCases.MessageActions;
 using Chatroom.Hubs;
 using Microsoft.AspNetCore.ResponseCompression;
 using Chatroom.UseCases.ContactActions;
+using Chatroom.CoreModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,7 @@ builder.Services.AddTransient<IFetchMessages, FetchMessages>();
 builder.Services.AddTransient<ISendMessage, SendMessage>();
 builder.Services.AddTransient<IAddContact, AddContact>();
 builder.Services.AddTransient<IFetchContacts, FetchContacts>();
+builder.Services.AddTransient<ICreateConversation, CreateConversation>();
 
 builder.Services.AddCors();
 builder.Services.AddSignalR();
@@ -50,6 +52,7 @@ builder.Services.AddResponseCompression(opts =>
 builder.Services.AddAuthentication(); // Auth
 builder.Services.AddScoped<ProtectedSessionStorage>(); // Auth
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // Auth
+builder.Services.AddScoped<SharedService>();
 
 builder.Services.AddDbContext<ChatroomContext>(options =>
 {

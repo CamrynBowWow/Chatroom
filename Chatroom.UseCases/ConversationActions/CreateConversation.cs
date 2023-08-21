@@ -18,7 +18,7 @@ namespace Chatroom.UseCases.ConversationActions
             this.conversationActions = conversationActions;
         }
 
-        public async Task<int> ExecuteAsync(User recipientUser, Guid userId)
+        public async Task<(int, bool)> ExecuteAsync(User recipientUser, Guid userId)
         {
             return await conversationActions.CreateConversations(recipientUser, userId);
         }

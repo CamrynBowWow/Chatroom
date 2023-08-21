@@ -9,6 +9,6 @@ namespace Chatroom.UseCases.Interfaces
 {
     public interface ICreateConversation
     {
-        Task<int> ExecuteAsync(User recipientUser, Guid UserId);
+        Task<(int, bool)> ExecuteAsync(User recipientUser, Guid UserId);
     }
 }

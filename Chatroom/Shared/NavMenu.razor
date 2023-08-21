@@ -1,4 +1,5 @@
 ﻿@inject IConversationActions ConversationActions
+@inject SharedService SharedService
 
 <AuthorizeView>
     <div class="top-row ps-3 navbar navbar-dark">
@@ -13,9 +14,9 @@
 
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            @if (userList != null)
+            @if (SharedService.NavMenuUserList != null)
             {
-                @foreach (KeyValuePair<int, User> userConversation in userList)
+                @foreach (KeyValuePair<int, User> userConversation in SharedService.NavMenuUserList)
                 {
                     <div class="nav-item px-3 nav-user-conversation">
                         <NavLink class="nav-link nav-link-width" href="@($"/userChat/{userConversation.Key.ToString()}/{userConversation.Value.UniqueName}/{Convert.ToBase64String(Encoding.UTF8.GetBytes(userConversation.Value.UserId.ToString()))}")">
@@ -33,8 +34,6 @@
 
 @code {
     private bool collapseNavMenu = true;
-
-    private Dictionary<int, User>? userList;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
@@ -54,6 +53,6 @@
 
         sidClaim = user.FindFirstValue(ClaimTypes.Sid);
 
-        userList = await ConversationActions.GetConversations(new Guid(sidClaim));
+        SharedService.NavMenuUserList = await ConversationActions.GetConversations(new Guid(sidClaim));
     }
 }

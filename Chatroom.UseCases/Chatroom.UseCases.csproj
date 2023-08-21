@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ConversationActions\CreateConversation.cs~RF65fabf2.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Chatroom.CoreModel\Chatroom.CoreModel.csproj" />
   </ItemGroup>
 
