@@ -2,6 +2,9 @@
 
 @inject IContactActions ContactActions
 @inject IJSRuntime JSRuntime
+@inject IConversationActions ConversationActions
+@inject NavigationManager NavigationManager
+@inject SharedService SharedService
 
 <PageTitle>Contacts</PageTitle>
 
@@ -19,13 +22,13 @@
         @foreach(User user in userList)
         {
             <div class="contact-container">
-                <div class="contact-unique-name-container">
+                <div @onclick="() => CreateConversation(user)" class="contact-unique-name-container">
                     <h2>@user.UniqueName</h2>
                 </div>
 
                 <div class="contact-options-container">
                     <span class="oi-trash"></span>
-                    <span class="oi-chat"></span>
+                    <span @onclick="() => CreateConversation(user)" class="oi-chat"></span>
                 </div>
             </div>
         }
@@ -71,5 +74,28 @@
     private async Task FetchContactList()
     {
         userList.AddRange(await ContactActions.FetchContacts(new Guid(sidClaim)));
+    }
+
+    private async Task CreateConversation(User user)
+    {
+        var fetchedConversationAction = await ConversationActions.CreateConversations(user, new Guid(sidClaim));
+
+        // When Conversation is Created it will be added to the Dictionary
+        if (fetchedConversationAction.Item2)
+        {
+            await AddToNavMenuUserList(fetchedConversationAction.Item1, user);
+        }
+
+        NavigationManager.NavigateTo($"/userChat/{fetchedConversationAction.Item1.ToString()}/{user.UniqueName}/{Convert.ToBase64String(Encoding.UTF8.GetBytes(user.UserId.ToString()))}");
+    }
+
+    private async Task AddToNavMenuUserList(int conversationId, User user)
+    {
+        if (SharedService.NavMenuUserList == null)
+        {
+            SharedService.NavMenuUserList = new Dictionary<int, User>();
+        }
+
+        SharedService.NavMenuUserList.Add(conversationId, user);
     }
 }

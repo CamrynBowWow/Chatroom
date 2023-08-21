@@ -22,7 +22,7 @@ namespace Chatroom.Plugins.EFCore
         {
             User fetchedUser = await db.User.FirstOrDefaultAsync(user => user.UniqueName == uniqueName);
 
-            if (fetchedUser == null)
+            if (fetchedUser == null || fetchedUser.UserId == userId)
             {
                 return (null, "User was not found. Check spelling.");
             }
