@@ -3,30 +3,12 @@
 <PageTitle>Index</PageTitle>
 
 <AuthorizeView>
-    <h1>Hello, @context.User.Identity.Name</h1>
-
-    <p>@emailClaim</p>
-    <p>@sidClaim</p>
-
-    <p>Welcome to your new app.</p>
-
-    <SurveyPrompt Title="How is Blazor working for you?" />
+    <div class="index-div">
+        <h1>Welcome, @context.User.Identity.Name</h1>
+    </div>
 </AuthorizeView>
 
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
 
-    private string emailClaim;
-    private string sidClaim;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await authenticationState;
-        var user = authState.User;
-
-        emailClaim = user.FindFirstValue(ClaimTypes.Email);
-        sidClaim = user.FindFirstValue(ClaimTypes.Sid);
-    }
 }

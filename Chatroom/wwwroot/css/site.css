@@ -137,3 +137,9 @@ a, .btn-link {
 .delete-button:hover {
     background-color: #a8a8a82d;
 }
+
+.index-div {
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+}
