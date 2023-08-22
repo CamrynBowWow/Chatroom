@@ -4,8 +4,9 @@
 <AuthorizeView>
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
-            @*Maybe make go to profile*@
-            <h2 class="navbar-brand">@context.User.Identity.Name</h2>
+            <NavLink class="navbar-brand" href="/">
+                <h2>@context.User.Identity.Name</h2>   
+            </NavLink>
             <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
