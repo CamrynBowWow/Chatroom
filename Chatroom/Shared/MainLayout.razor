@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Chatroom</PageTitle>
 
@@ -15,13 +16,13 @@
             <main>
                 <div class="top-row px-4">
                     @*TODO: will need to add this in navmenut when screen smaller*@
-                    <NavLink class="nav-link" href="contacts">
+                    <NavLink class="nav-link pointer" href="contacts">
                         <span class="oi oi-people" aria-hidden="true"></span> Contacts
                     </NavLink>
-                    <NavLink class="nav-link" href="profile">
+                    <NavLink class="nav-link pointer" href="profile">
                         <span class="oi oi-person" aria-hidden="true"></span> Profile
                     </NavLink>
-                    <NavLink class="nav-link" href="">
+                    <NavLink class="nav-link pointer" @onclick="LogOut">
                         <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
                     </NavLink>
                 </div>
@@ -47,3 +48,12 @@
     </NotAuthorized>
 
 </AuthorizeView>
+
+@code {
+    private async void LogOut()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
+
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+    }
+}
