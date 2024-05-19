@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chatroom.Plugins.EFCore.Migrations
 {
     [DbContext(typeof(ChatroomContext))]
-    [Migration("20230816131829_Init6")]
-    partial class Init6
+    [Migration("20240519095501_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -120,7 +120,7 @@ namespace Chatroom.Plugins.EFCore.Migrations
                             MessageId = 1,
                             Context = "Hi, There!",
                             ConversationId = 1,
-                            Created = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1879),
+                            Created = new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3813),
                             UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b")
                         });
                 });
@@ -170,7 +170,7 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         new
                         {
                             UserId = new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"),
-                            CreatedAt = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1763),
+                            CreatedAt = new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3663),
                             Email = "joe@gmail.com",
                             FirstName = "Joe",
                             LastName = "Dirt",
@@ -180,7 +180,7 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         new
                         {
                             UserId = new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"),
-                            CreatedAt = new DateTime(2023, 8, 16, 15, 18, 28, 890, DateTimeKind.Local).AddTicks(1775),
+                            CreatedAt = new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3676),
                             Email = "jane@gmail.com",
                             FirstName = "Jane",
                             LastName = "Doe",

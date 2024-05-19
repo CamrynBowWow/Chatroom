@@ -14,24 +14,13 @@ namespace Chatroom.Plugins.EFCore.Migrations
                 columns: table => new
                 {
                     ConversationId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartedUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RecipientUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Conversation", x => x.ConversationId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContactList",
-                columns: table => new
-                {
-                    ContactId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContactList", x => x.ContactId);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,23 +34,31 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ContactListContactId = table.Column<int>(type: "int", nullable: true),
-                    ConversationId = table.Column<int>(type: "int", nullable: true)
+                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContactList",
+                columns: table => new
+                {
+                    ContactId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserContact = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactList", x => x.ContactId);
                     table.ForeignKey(
-                        name: "FK_User_ContactList_ContactListContactId",
-                        column: x => x.ContactListContactId,
-                        principalTable: "ContactList",
-                        principalColumn: "ContactId");
-                    table.ForeignKey(
-                        name: "FK_User_Conversation_ConversationId",
-                        column: x => x.ConversationId,
-                        principalTable: "Conversation",
-                        principalColumn: "ConversationId");
+                        name: "FK_ContactList_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +70,7 @@ namespace Chatroom.Plugins.EFCore.Migrations
                     Context = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ConversationId = table.Column<int>(type: "int", nullable: true)
+                    ConversationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,7 +79,8 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         name: "FK_Message_Conversation_ConversationId",
                         column: x => x.ConversationId,
                         principalTable: "Conversation",
-                        principalColumn: "ConversationId");
+                        principalColumn: "ConversationId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Message_User_UserId",
                         column: x => x.UserId,
@@ -91,35 +89,40 @@ namespace Chatroom.Plugins.EFCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserConversation",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ConversationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserConversation", x => new { x.UserId, x.ConversationId });
-                    table.ForeignKey(
-                        name: "FK_UserConversation_Conversation_ConversationId",
-                        column: x => x.ConversationId,
-                        principalTable: "Conversation",
-                        principalColumn: "ConversationId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserConversation_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "Conversation",
+                columns: new[] { "ConversationId", "RecipientUser", "StartedUser" },
+                values: new object[] { 1, new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"), new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b") });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "UserId", "CreatedAt", "Email", "FirstName", "LastName", "LastUpdatedAt", "Password", "UniqueName" },
+                values: new object[] { new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"), new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3676), "jane@gmail.com", "Jane", "Doe", null, "1234567", "JaneNew" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "UserId", "CreatedAt", "Email", "FirstName", "LastName", "LastUpdatedAt", "Password", "UniqueName" },
+                values: new object[] { new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"), new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3663), "joe@gmail.com", "Joe", "Dirt", null, "Password", "JoeDirtie" });
+
+            migrationBuilder.InsertData(
+                table: "ContactList",
+                columns: new[] { "ContactId", "UserContact", "UserId" },
+                values: new object[] { 1, new Guid("7bccb0ba-0050-4f69-9312-906436dda76f"), new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b") });
+
+            migrationBuilder.InsertData(
+                table: "ContactList",
+                columns: new[] { "ContactId", "UserContact", "UserId" },
+                values: new object[] { 2, new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b"), new Guid("7bccb0ba-0050-4f69-9312-906436dda76f") });
+
+            migrationBuilder.InsertData(
+                table: "Message",
+                columns: new[] { "MessageId", "Context", "ConversationId", "Created", "UserId" },
+                values: new object[] { 1, "Hi, There!", 1, new DateTime(2024, 5, 19, 11, 55, 1, 760, DateTimeKind.Local).AddTicks(3813), new Guid("eb0fbf5c-a60a-4ea7-a5e1-a9b58d1a062b") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContactList_UserId",
                 table: "ContactList",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_ConversationId",
@@ -132,16 +135,6 @@ namespace Chatroom.Plugins.EFCore.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_ContactListContactId",
-                table: "User",
-                column: "ContactListContactId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_ConversationId",
-                table: "User",
-                column: "ConversationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_User_Email",
                 table: "User",
                 column: "Email",
@@ -152,41 +145,21 @@ namespace Chatroom.Plugins.EFCore.Migrations
                 table: "User",
                 column: "UniqueName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserConversation_ConversationId",
-                table: "UserConversation",
-                column: "ConversationId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ContactList_User_UserId",
-                table: "ContactList",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_ContactList_User_UserId",
-                table: "ContactList");
+            migrationBuilder.DropTable(
+                name: "ContactList");
 
             migrationBuilder.DropTable(
                 name: "Message");
 
             migrationBuilder.DropTable(
-                name: "UserConversation");
+                name: "Conversation");
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "ContactList");
-
-            migrationBuilder.DropTable(
-                name: "Conversation");
         }
     }
 }

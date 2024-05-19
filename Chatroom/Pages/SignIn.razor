@@ -22,7 +22,7 @@
         <h3>Sign In</h3>
     </div>
 
-    <div class="main-container">
+    <form class="main-container">
         <div class="child-container">
             <div class="input-container">
                 <label>Email</label>
@@ -34,14 +34,14 @@
                 <input class="default-input form-control" @bind-value="user.Password" type="password" name="password" placeholder="Enter Password..." />
             </div>
 
-            <button type="button" class="btn btn-outline-primary" @onclick="SignInSubmit">Sign In</button>
+            <button type="submit" class="btn btn-outline-primary" @onclick:preventDefault="true" @onclick="SignInSubmit">Sign In</button>
             
             <div class="link-div">
                 <a href="/register">Register</a>
                 <a href="/forgotPassword">Forgot Password?</a>
             </div>
         </div>
-    </div>
+    </form>
 
 </div>
 
@@ -58,8 +58,8 @@
     }
 
     private async void SignInSubmit()
-    {
-        if (String.IsNullOrWhiteSpace(user.Email) || String.IsNullOrWhiteSpace(user.Password))
+    {        
+        if (String.IsNullOrWhiteSpace(user?.Email) || String.IsNullOrWhiteSpace(user.Password))
         {
             await JSRuntime.InvokeVoidAsync("alert", "Please Fill in your details or Register");
             return;

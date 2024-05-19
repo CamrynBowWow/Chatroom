@@ -28,7 +28,7 @@ namespace Chatroom.Plugins.EFCore
 
         public async Task<bool> SignInAction(string email, string password)
         {
-            User user = await db.User.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+            User? user = await db.User.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
             if (user == null)
             {
